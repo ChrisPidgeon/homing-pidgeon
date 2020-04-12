@@ -1,3 +1,6 @@
+#author Chris "homing-pidgeon" Pidgeon
+#date Sunday 12, April 2020
+
 #This will be my first personal Python project. I have a desire to build a quick, easy to use
 #password generator. This generator will perform the following tasks:
 
@@ -12,6 +15,8 @@
 import random
 import string
 import datetime
+from datetime import date
+from datetime import datetime
 
 abc_lower = list(string.ascii_lowercase) #List of all lowercase letters of the alphabet
 abc_upper = list(string.ascii_uppercase) #List of all uppercase letters of the alphabet
@@ -20,7 +25,7 @@ characters = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '
 full_characters = abc_lower + abc_upper + digits + characters #All characters, letters, and digits possible
 random.seed()
 
-def createPassword(desired_characters):
+def createPassword(desired_characters, intended_purpose):
     password = ""
     length = desired_characters
     count = 0
@@ -29,10 +34,33 @@ def createPassword(desired_characters):
         password = password + random.choice(full_characters)
         count += 1
 
-    return password
+    status = savePassword(password, intended_purpose)
+    if status == True:
+        print("\nYour randomized password is: {}".format(password))
+        print("Your password can be found for future reference in the file just created for you!")
+        print("\nThank you!")
 
 def savePassword(password, intended_purpose):
-    pass
+    today = date.today()
+    time = datetime.now()
+
+    current_time = time.strftime("%H:%M:%S")
+    date_formatted = today.strftime("%d/%m/%y")
+    intended_purpose_alternate = intended_purpose.upper()
+    file_created = False
+    try:
+        file = open("{}.txt".format(intended_purpose), "x")    
+    except FileExistsError:
+        print("\nFile already exists.")
+        return file_created
+    else:
+        file_created = True
+
+    if(file_created == True):
+        print("\nFile {}.txt created.".format(intended_purpose))
+        file.write("Password {} created at {} on {} for {}.".format(password, current_time, date_formatted, intended_purpose))
+        file.close()
+        return file_created
 
 print("""\nWelcome to homing-pidgeon's password generator!\n
 To begin, the program will require a number of characters corresponding to 
@@ -53,9 +81,5 @@ while(loop):
             loop = False
             break
 
-intended_purpose = input("For what site or service is this password to be associated with?\n")
-
-random_password = createPassword(desired_characters)
-file_name = savePassword(random_password, intended_purpose)
-print("\nYour randomized password is: {}".format(random_password))
-print("This password will be stored in a file named {}.txt for future reference.".format(file_name))
+intended_purpose_input = input("\nFor what site or service is this password to be associated with?\n")
+createPassword(desired_characters, intended_purpose_input)
