@@ -17,11 +17,19 @@ abc_lower = list(string.ascii_lowercase) #List of all lowercase letters of the a
 abc_upper = list(string.ascii_uppercase) #List of all uppercase letters of the alphabet
 digits = [str(x) for x in range(0, 10)] #Numbers from 0 to 9 converted to strings
 characters = ['!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'] #All chacaters that can be printed in Python
-password = ""
-loop = True
+full_characters = abc_lower + abc_upper + digits + characters #All characters, letters, and digits possible
+random.seed()
 
 def createPassword(desired_characters):
-    pass
+    password = ""
+    length = desired_characters
+    count = 0
+
+    while count <= length:
+        password = password + random.choice(full_characters)
+        count += 1
+    return password
+
 
 def savePassword(password, intended_purpose):
     pass
@@ -32,6 +40,7 @@ the length of your desired password. A password will then be generated that
 is entirely random, and therefore incredibly strong in its security! These 
 passwords can be found in a .txt file generated with each password.\n""")
 
+loop = True
 while(loop):
     try:
         desired_characters = int(input("How long should the password be? (Maximum 30)\n"))
@@ -47,6 +56,6 @@ while(loop):
 intended_purpose = input("For what site or service is this password to be associated with?\n")
 
 random_password = createPassword(desired_characters)
-file_name = savePassword(password, intended_purpose)
-print("Your randomized password is: {}".format(random_password))
+file_name = savePassword(random_password, intended_purpose)
+print("\nYour randomized password is: {}".format(random_password))
 print("This password will be stored in a file named {}.txt for future reference.".format(file_name))
