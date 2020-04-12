@@ -25,11 +25,11 @@ def createPassword(desired_characters):
     length = desired_characters
     count = 0
 
-    while count <= length:
+    while count < length:
         password = password + random.choice(full_characters)
         count += 1
-    return password
 
+    return password
 
 def savePassword(password, intended_purpose):
     pass
